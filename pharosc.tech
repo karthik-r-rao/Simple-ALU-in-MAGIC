@@ -1,0 +1,2358 @@
+#====================================================================================
+#                   Copyright (c) 2003-2008 Graham Petley
+# graham dot petley at vlsitechnology dot org
+# based on scmos.tech27, sample6m.tech and scmos8m.tech, original works supplied
+# with the Magic distribution.
+#
+# This technology file has been merged from the previously separate vsc200.tech27,
+# vsc013.tech27 etc files and brought up to format 33. This means that Magic more
+# recent than November 2006 must be used. I use Magic 7.5.95.
+# The revision history of the previous files has been moved to the bottom.
+#
+# Revision history
+#    4-JAN-08
+#1/ Extended to 6 metal layers
+#2/ Cleaned up synonyms
+#3/ All cifoutput and cifinput revised and made consistent
+#4/ Added render statements for 3D viewing
+#5/ Added metal0 to support narrow metal1 inside standard cells
+#6/ 1um CIF written for compatibility with vxlib and original Alliance sxlib
+#7/ Improved support of endcap for sxlib in 0.13um
+#8/ Updated DRC rules
+#9/ Cpmplete rewrite of extract section
+#
+#====================================================================================
+
+tech
+	scmos
+	format 33
+end
+
+version
+    version 4-JAN-08
+    description "pharosc 2um, 1um and 0.13um technology file, 6LM"
+end
+
+planes
+    abutment,ab
+    well,w
+    active,a
+    metal1,m1
+    metal2,m2
+    metal3,m3
+    metal4,m4
+    metal5,m5
+    metal6,m6
+    oxide,ox
+end
+
+types
+    abutment    ab,subcircuit
+    well	nwell,nw
+    well	pwell,pw
+    active	poly,polysilicon,p
+    active	ndif,ndiffusion,ndiff
+    active	pdif,pdiffusion,pdiff
+    metal1	alu1,metal1,m1
+    metal2	alu2,metal2,m2
+    metal3	alu3,metal3,m3
+    metal4	alu4,metal4,m4
+    metal5	alu5,metal5,m5
+    metal6	alu6,metal6,m6
+    active	ptie,psub,psubstratepdiff
+    active	ntie,nsub,nsubstratendiff
+    active	nmos,nfet,ntransistor
+    active	pmos,pfet,ptransistor
+    active	polyct0
+    active	polyct1,polycontact,pcontact,polycut,pc
+	active	ndifct0
+    active	ndifct1,ndcontact,ndifcut,ndc
+	active	ntiect0
+	active  ntiect1,nsubct,nsubstratencontact
+	active	ptiect0
+	active  ptiect1,psubct,psubstratepcontact
+	active	pdifct0
+    active	pdifct1,pdcontact,pdifcut,pdc
+	metal1	alu0,metal0,m0 
+    metal1	via1,m2contact,m2cut,m2c,via,v1,v
+    metal2	via2,via2ontact,m3cut,m3c,v2
+    metal3	via3,m4contact,m4cut,m4c,v3
+    metal4	via4,m5contact,m5cut,m5c,v4
+    metal5	via5,m6contact,m6cut,m6c,v5
+    active	nimp,nimplant,nselect
+    active	pimp,pimplant,pselect
+    oxide	substrateopen,subopen,open
+    oxide	pdiffusionstop,pdifstop,pstop
+end
+
+contact
+    polyct0	poly	alu0
+    ndifct0	ndif	alu0
+    pdifct0	pdif	alu0
+    ntiect0	ntie	alu0
+    ptiect0	ptie	alu0
+    polyct1	poly	alu1
+    ndifct1	ndif	alu1
+    pdifct1	pdif	alu1
+    ntiect1	ntie	alu1
+    ptiect1	ptie	alu1
+    via1	alu1	alu2
+    via2	alu2	alu3
+    via3	alu3	alu4
+    via4	alu4	alu5
+    via5	alu5	alu6
+    stackable
+end
+
+aliases
+	well	nwell,pwell
+	ndifct	ndifct0,ndifct1
+	pdifct	pdifct0,pdifct1
+	ntiect	ntiect0,ntiect1
+	ptiect	ptiect0,ptiect1
+	polyct	polyct0,polyct1
+	allalu0	alu0,polyct0/m1,ndifct0/m1,pdifct0/m1,ntiect0/m1,ptiect0/m1
+	allalu1	alu1,polyct1/m1,ndifct1/m1,pdifct1/m1,ntiect1/m1,ptiect1/m1,via1/m1
+	allalu	allalu0,allalu1
+	allalu2	alu2,via1/m2,via2/m2
+	allalu3	alu3,via2/m3,via3/m3
+	allalu4	alu4,via3/m4,via4/m4
+	allalu5	alu5,via4/m5,via5/m5
+	allalu6	alu6,via5/m6
+end
+
+styles
+	styletype	mos
+	ab		67 subcircuit
+	nwell	12 nwell
+	pwell	13 pwell
+	poly	1 polysilicon
+	ndif	2 ndiffusion
+	pdif	4 pdiffusion
+	ptie	5 pdiff_in_pwell
+	ntie	3 ndiff_in_nwell
+	nimp	36 nselect
+	pimp	35 pselect
+	nfet	6 ntransistor
+	pfet	8 ptransistor
+	alu0	49 metal1tight
+	alu1	20 metal1
+	alu2	21 metal2
+	alu3	22 metal3
+	alu4	23 metal4
+	alu5	24 metal5
+	alu6	64 metal6
+	polyct0	26 poly_contact
+	polyct1	26 poly_contact
+	ndifct0	71 ncontact
+	ndifct1	71 ncontact
+	pdifct0 74 pcontact
+	pdifct1	74 pcontact
+	ptiect0	74 pcontact
+	ptiect1	74 pcontact
+	ntiect0	71 ncontact
+	ntiect1	71 ncontact
+	via1	81 via1
+	via2	37 via2
+	via3	38 via3
+	via4	39 via4
+	via5	59 via5 64 metal6
+	open	 2	20
+	error_p	42
+	error_s	42
+	error_ps	42
+end
+
+compose
+	compose	nmos	poly	ndif
+	compose	pmos	poly	pdif
+	paint	pdifct0	pwell	ndifct0
+	paint	pdifct1	pwell	ndifct1
+	paint	pmos	pwell	nmos
+	paint	pdif	pwell	ndif
+	paint	ntie	pwell	ptie
+	paint	ntiect0	pwell	ptiect0
+	paint	ntiect1	pwell	ptiect1
+	paint	ndifct0	nwell	pdifct0
+	paint	ndifct1	nwell	pdifct1
+	paint	nmos	nwell	pmos
+	paint	ndif	nwell	pdif
+	paint	ptie	nwell	ntie
+	paint	ptiect0	nwell	ntiect1
+	paint	ptiect1	nwell	ntiect1
+	paint	ptiect0	alu1	ptiect1
+	paint	ntiect0	alu1	ntiect1
+	paint	pdifct0	alu1	pdifct1
+	paint	ndifct0	alu1	ndifct1
+	paint	ptiect1	alu0	ptiect0
+	paint	ntiect1	alu0	ntiect0
+	paint	pdifct1	alu0	pdifct0
+	paint	ndifct1	alu0	ndifct0
+end
+
+connect
+	pwell,*ptie	pwell,*ptie
+	nwell,*ntie	nwell,*ntie
+	*alu0,*alu1 *alu0,*alu1
+	*alu2 *alu2
+	*alu3 *alu3
+	*alu4 *alu4
+	*alu5 *alu5
+	*alu6 *alu6
+    *ndif,*ntie,*pdif,*ptie *ndif,*ntie,*pdif,*ptie
+    *poly,nmos,pmos *poly,nmos,pmos
+end
+
+cifoutput
+style pharosc200 variants (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+variant *
+	scalefactor 100
+	gridlimit 100
+variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib)
+	layer AB ab
+		calma 63 0
+variant *
+	layer CWN nwell
+		calma 42 0
+	layer CWP pwell
+		calma 41 0
+	layer CPD *pdif,pfet
+		labels *pdif,pfet
+		calma 4 0
+	layer CND *ndif,nfet
+		labels *ndif,nfet
+		calma 3 0
+	layer CPS *ptie
+		calma 6 0
+	layer CNS *ntie
+		calma 5 0
+	layer CAA *ndif,nfet,*pdif,pfet,*ntie,*ptie
+		labels *ndif,nfet,*pdif,pfet
+		calma 43 0
+	layer CPG *poly,nfet,pfet
+		labels *poly,nfet,pfet
+		calma 46 0
+	layer CCC ndifct/m1,pdifct/m1
+		calma 25 0
+	layer CCC ntiect/m1,ptiect/m1
+		calma 25 0
+	layer CCC polyct/m1
+		calma 25 0
+	layer CV1 via1/m1
+		calma 50 0
+# CM1 varies and is treated in individual variants
+	layer CV2 via2/m2
+		calma 61 0
+# CM2 varies and is treated in individual variants
+	layer CV3 via3/m3
+		calma 30 0
+	layer CM3 *alu3
+		labels *alu3
+		calma 62 0
+	layer CV4 via4/m4
+		calma 32 0
+	layer CM4 *alu4
+		labels *alu4
+		calma 31 0
+	layer CV5 via5/m5
+		calma 36 0
+	layer CM5 *alu5
+		labels *alu5
+		calma 33 0
+	layer CM6 *alu6
+		labels *alu6
+		calma 37 0
+
+variant (1um-vsclib),(1um-vsxlib),(1um-ssxlib)
+	layer CM1 *alu1
+		labels *alu0,*alu1
+		or alu0
+		and AB
+		grow 100
+		shrink 100
+		calma 49 0
+	layer CM2 *alu2
+		labels *alu2
+		calma 51 0
+	templayer XTN *ntie
+		grow 100
+	templayer XTP *ptie
+		grow 100
+	layer CSN *ntie
+		grow 100
+		calma 45 0
+	layer CSP *ptie
+		grow 100
+		calma 44 0
+	layer CSN pwell
+		and AB
+		grow 200
+		and CWP
+		and-not XTP
+		calma 45 0
+	layer CSP nwell
+        and AB
+        grow 200
+        and CWN
+		and-not XTN
+		calma 44 0
+
+variant (1um-wsclib)
+	templayer XAB ab
+		grow 400
+	templayer YAB ab
+		shrink 400
+	templayer XM1 ntiect/m1,ptiect/m1
+		grow 500
+		and XAB
+		shrink 200
+	layer CM1 *alu1
+		labels *alu0,*alu1
+		or alu0
+		and AB
+		or XM1
+		grow 100
+		shrink 100
+		calma 49 0
+	layer CM2 *alu2
+		labels *alu2
+		calma 51 0
+	templayer XTN *ntie
+		grow 200
+		and-not AB
+		shrink 200
+		grow 200
+		and-not XAB
+	templayer XTP *ptie
+		grow 200
+		and-not AB
+		shrink 200
+		grow 200
+		and-not XAB
+	layer CSN *ntie
+		grow 200
+		and-not XTN
+		and-not YAB
+		shrink 300
+		grow 300
+		calma 45 0
+	layer CSP *ptie
+		grow 200
+		and-not XTP
+		and-not YAB
+		shrink 300
+		grow 300
+		calma 44 0
+	layer CSN pwell
+		and AB
+		grow 200
+		and CWP
+		and-not CSP
+		calma 45 0
+	layer CSP nwell
+        and AB
+        grow 200
+        and CWN
+		and-not CSN
+		calma 44 0
+
+variant (1um-rgalib)
+	templayer XWE nwell
+		or pwell
+		shrink 400
+	layer CM1 allalu1
+		labels *alu0,*alu1
+		or allalu0
+		and XWE
+		grow 100
+		shrink 100
+		calma 49 0
+	layer CM2 *alu2
+		labels *alu2
+		and XWE
+		calma 51 0
+	templayer BAB ab
+		grow 400
+	templayer XSP nwell
+		shrink 400
+	templayer XSN pwell
+		shrink 400
+	templayer XTN *ntie
+		grow 100
+	templayer XTP *ptie
+		grow 100
+	layer CSN *ntie
+		grow 200
+		and-not AB
+		or XTN
+		shrink 300
+		grow 300
+		and BAB
+		calma 45 0
+	layer CSP *ptie
+		grow 200
+		and-not AB
+		or XTP
+		shrink 300
+		grow 300
+		and BAB
+		calma 44 0
+	layer CSN pwell
+		and AB
+		grow 200
+		or XSN
+		and CWP
+		and-not XTP
+		shrink 100
+		grow 100
+		calma 45 0
+	layer CSP nwell
+		and AB
+		grow 200
+		or XSP
+		and CWN
+		and-not XTN
+		shrink 100
+		grow 100
+		calma 44 0
+
+variant (1um-vgalib)
+	layer CM1 allalu1
+		labels *alu0,*alu1
+		or allalu0
+		grow 100
+		shrink 100
+		calma 49 0
+	layer CM2 *alu2
+		labels *alu2
+		calma 51 0
+	templayer BAB ab
+		grow 400
+	templayer XTN *ntie
+		grow 100
+	templayer XTP *ptie
+		grow 100
+	templayer XSP nwell
+		and ab
+	templayer XSN pwell
+		and ab
+	layer CSN *ntie
+		grow 200
+		and-not AB
+		or XTN
+		shrink 300
+		grow 300
+		and BAB
+		calma 45 0
+	layer CSP *ptie
+		grow 200
+		and-not AB
+		or XTP
+		shrink 300
+		grow 300
+		and BAB
+		calma 44 0
+	layer CSN pwell
+		and AB
+		and-not XTP
+		shrink 1200
+		grow 1400
+		or XSN
+		grow 200
+		and CWP
+		and-not XTP
+		shrink 100
+		grow 100
+		calma 45 0
+	layer CSP nwell
+		and AB
+		and-not XTN
+		shrink 1200
+		grow 1400
+		or XSP
+		grow 200
+		and CWN
+		and-not XTN
+		shrink 100
+		grow 100
+		calma 44 0
+
+variant (1um-vxlib),(1um-sxlib)
+	layer CM1 *alu1
+		labels *alu1
+		and ab
+		calma 49 0
+	layer CM2 *alu2
+		labels *alu2
+		calma 51 0
+	templayer XTN *ntie
+		grow 100
+	templayer XTP *ptie
+		grow 100
+	layer CSN *ntie
+		grow 100
+		calma 45 0
+	layer CSP *ptie
+		grow 100
+		calma 44 0
+	layer CSN pwell
+		and ab
+		grow 200
+		and CWP
+		and-not XTP
+		calma 45 0
+	layer CSP nwell
+        and ab
+        grow 200
+        and CWN
+		and-not XTN
+		calma 44 0
+
+style pharosc100 variants (0.5um-vsxlib),(0.5um-ssxlib),(0.5um-vxlib),(0.5um-sxlib)
+variant *
+	scalefactor 50
+	gridlimit 50
+variant (0.5um-vsxlib),(0.5um-ssxlib)
+	layer AB ab
+		calma 63 0
+variant *
+	layer CWN nwell
+		calma 42 0
+	layer CWP pwell
+		calma 41 0
+	layer CPD *pdif,pfet
+		labels *pdif,pfet
+		calma 4 0
+	layer CND *ndif,nfet
+		labels *ndif,nfet
+		calma 3 0
+	layer CPS *ptie
+		calma 6 0
+	layer CNS *ntie
+		calma 5 0
+	layer CAA *ndif,nfet,*pdif,pfet,*ntie,*ptie
+		labels *ndif,nfet,*pdif,pfet
+		calma 43 0
+	layer CPG *poly,nfet,pfet
+		labels *poly,nfet,pfet
+		calma 46 0
+	layer CCC ndifct/m1,pdifct/m1
+		calma 25 0
+	layer CCC ntiect/m1,ptiect/m1
+		calma 25 0
+	layer CCC polyct/m1
+		calma 25 0
+	layer CV1 via1/m1
+		calma 50 0
+	layer CM1 *alu1
+		labels *alu0,*alu1
+		or alu0
+		and AB
+		grow 50
+		shrink 50
+		calma 49 0
+	layer CV2 via2/m2
+		calma 61 0
+	layer CM2 *alu2
+		labels *alu2
+		calma 51 0
+	layer CV3 via3/m3
+		calma 30 0
+	layer CM3 *alu3
+		labels *alu3
+		calma 62 0
+	layer CV4 via4/m4
+		calma 32 0
+	layer CM4 *alu4
+		labels *alu4
+		calma 31 0
+	layer CV5 via5/m5
+		calma 36 0
+	layer CM5 *alu5
+		labels *alu5
+		calma 33 0
+	layer CM6 *alu6
+		labels *alu6
+		calma 37 0
+	layer CM1 *alu1
+		labels *alu1
+		and ab
+		calma 49 0
+	layer CM2 *alu2
+		labels *alu2
+		calma 51 0
+	templayer XTN *ntie
+		grow 50
+	templayer XTP *ptie
+		grow 50
+	layer CSN *ntie
+		grow 50
+		calma 45 0
+	layer CSP *ptie
+		grow 50
+		calma 44 0
+	layer CSN pwell
+		and ab
+		grow 100
+		and CWP
+		and-not XTP
+		calma 45 0
+	layer CSP nwell
+        and ab
+        grow 100
+        and CWN
+		and-not XTN
+		calma 44 0
+
+style pharosc013 variants (55nm-vsclib),(55nm-wsclib),(55nm-rgalib),(55nm-vgalib),(55nm-vsxlib),(55nm-ssxlib),(55nm-vxlib),(55nm-sxlib)
+variant *
+	scalefactor 55 nanometers
+	gridlimit 5
+variant (55nm-vsclib),(55nm-wsclib),(55nm-rgalib),(55nm-vgalib),(55nm-vsxlib),(55nm-ssxlib)
+	layer AB ab
+		calma 63 0
+variant *
+    templayer XW ab
+		grow 220
+		or nwell
+		or pwell
+		shrink 220
+    layer CWN nwell
+		calma 42 0
+    layer CWP pwell
+		calma 41 0
+variant (55nm-vsclib),(55nm-wsclib),(55nm-rgalib),(55nm-vgalib),(55nm-vsxlib),(55nm-ssxlib),(55nm-vxlib)
+	layer CPD *pdif,pfet
+		labels *pdif,pfet
+		calma 4 0
+	layer CND *ndif,nfet
+		labels *ndif,nfet
+		calma 3 0
+	layer CPS *ptie
+		calma 6 0
+	layer CNS *ntie
+		calma 5 0
+	layer CAA *ndif,nfet,*pdif,pfet,*ntie,*ptie
+		labels *ndif,nfet,*pdif,pfet
+		calma 43 0
+	layer CPG *poly,nfet,pfet
+		labels *poly,nfet,pfet
+        grow 5
+		calma 46 0
+variant (55nm-sxlib)
+	layer CPD *pdif,pfet
+		labels *pdif,pfet
+		shrink 5
+		calma 4 0
+	layer CND *ndif,nfet
+		labels *ndif,nfet
+		shrink 5
+		calma 3 0
+	layer CPS *ptie
+		shrink 5
+		calma 6 0
+	layer CNS *ntie
+		shrink 5
+		calma 5 0
+	layer CAA *ndif,nfet,*pdif,pfet,*ntie,*ptie
+		labels *ndif,nfet,*pdif,pfet
+		shrink 5
+		calma 43 0
+	templayer XPG *poly,nfet,pfet
+        grow 5
+	templayer XMOS nfet,pfet
+		grow 90
+		and-not CAA
+		grow 85
+		and-not CAA
+		and-not XPG
+		shrink 15
+		grow 15
+	templayer ECAP nfet,pfet
+		grow 90
+		and-not CAA
+		grow 85
+		and-not CAA
+		and-not XMOS
+	layer CPG *poly,nfet,pfet
+		labels *poly,nfet,pfet
+        grow 5
+		or ECAP
+		calma 46 0
+variant *
+	layer CCC ndifct/m1,pdifct/m1
+		grow 25
+		calma 25 0
+	layer CCC ntiect/m1,ptiect/m1
+		grow 25
+		calma 25 0
+	layer CCC polyct/m1
+		grow 25
+		calma 25 0
+	layer CV1 via1/m1
+		grow 45
+		calma 50 0
+# CM1 varies and is treated in individual variants
+	layer CV2 via2/m2
+		grow 45
+		calma 61 0
+# CM2 varies and is treated in individual variants
+	layer CV3 via3/m3
+		grow 45
+		calma 30 0
+	layer CM3 *alu3
+		labels *alu3
+		calma 62 0
+	layer CV4 via4/m4
+		grow 45
+		calma 32 0
+	layer CM4 *alu4
+		labels *alu4
+		calma 31 0
+	layer CV5 via5/m5
+		grow 45
+		calma 36 0
+	layer CM5 *alu5
+		labels *alu5
+		calma 33 0
+	layer CM6 *alu6
+		labels *alu6
+		calma 37 0
+
+variant (55nm-vsclib),(55nm-vsxlib),(55nm-ssxlib)
+	templayer CM0 *alu0
+		shrink 15		
+	layer CM1 *alu1
+		labels *alu0,*alu1
+		or CM0
+		and AB
+		grow 85
+		shrink 85
+		calma 49 0
+	layer CM2 *alu2
+		labels *alu2
+		calma 51 0
+	templayer XTN *ntie
+		grow 40
+	templayer XTP *ptie
+		grow 40
+	layer CSN *ntie
+		grow 40
+		calma 45 0
+	layer CSP *ptie
+		grow 40
+		calma 44 0
+	layer CSN pwell
+		and AB
+		grow 125
+		and CWP
+		and-not XTP
+		calma 45 0
+	layer CSP nwell
+        and AB
+        grow 125
+        and CWN
+		and-not XTN
+		calma 44 0
+
+variant (55nm-wsclib)
+	templayer XAB ab
+		grow 205
+	templayer YAB ab
+		shrink 205
+	templayer XM1 ntiect/m1,ptiect/m1
+		grow 260
+		and XAB
+		shrink 95
+	templayer CM0 *alu0
+		shrink 15		
+	layer CM1 *alu1
+		labels *alu0,*alu1
+		or CM0
+		and AB
+		or XM1
+		grow 85
+		shrink 85
+		calma 49 0
+	layer CM2 *alu2
+		labels *alu2
+		calma 51 0
+	templayer XTN *ntie
+		grow 125
+		and-not AB
+		shrink 125
+		grow 125
+		and-not XAB
+	templayer XTP *ptie
+		grow 125
+		and-not AB
+		shrink 125
+		grow 125
+		and-not XAB
+	layer CSN *ntie
+		grow 125
+		and-not XTN
+		and-not YAB
+		shrink 165
+		grow 165
+		calma 45 0
+	layer CSP *ptie
+		grow 125
+		and-not XTP
+		and-not YAB
+		shrink 165
+		grow 165
+		calma 44 0
+	layer CSN pwell
+		and AB
+		grow 125
+		and CWP
+		and-not CSP
+		calma 45 0
+	layer CSP nwell
+        and AB
+        grow 125
+        and CWN
+		and-not CSN
+		calma 44 0
+
+variant (55nm-rgalib)
+	templayer XWE nwell
+		or pwell
+		shrink 220
+	templayer CM0 allalu0
+		shrink 15		
+	layer CM1 allalu1
+		labels *alu0,*alu1
+		or CM0
+		and XWE
+		grow 85
+		shrink 85
+		calma 49 0
+	layer CM2 *alu2
+		labels *alu2
+		and XWE
+		calma 51 0
+	templayer BAB ab
+		grow 205
+	templayer XSP nwell
+		shrink 235
+	templayer XSN pwell
+		shrink 235
+	templayer XTN *ntie
+		grow 40
+	templayer XTP *ptie
+		grow 40
+	layer CSN *ntie
+		grow 125
+		and-not AB
+		or XTN
+		shrink 165
+		grow 165
+		and BAB
+		calma 45 0
+	layer CSP *ptie
+		grow 125
+		and-not AB
+		or XTP
+		shrink 165
+		grow 165
+		and BAB
+		calma 44 0
+	layer CSN pwell
+		and AB
+		grow 125
+		or XSN
+		and CWP
+		and-not XTP
+		shrink 120
+		grow 120
+		calma 45 0
+	layer CSP nwell
+		and AB
+		grow 125
+		or XSP
+		and CWN
+		and-not XTN
+		shrink 120
+		grow 120
+		calma 44 0
+
+variant (55nm-vgalib)
+	templayer CM0 allalu0
+		shrink 15		
+	layer CM1 allalu1
+		labels *alu0,*alu1
+		or CM0
+		grow 85
+		shrink 85
+		calma 49 0
+	layer CM2 *alu2
+		labels *alu2
+		calma 51 0
+	templayer BAB ab
+		grow 205
+	templayer XTN *ntie
+		grow 40
+	templayer XTP *ptie
+		grow 40
+	templayer XSP nwell
+		and ab
+	templayer XSN pwell
+		and ab
+	layer CSN *ntie
+		grow 125
+		and-not AB
+		or XTN
+		shrink 165
+		grow 165
+		and BAB
+		calma 45 0
+	layer CSP *ptie
+		grow 125
+		and-not AB
+		or XTP
+		shrink 165
+		grow 165
+		and BAB
+		calma 44 0
+	layer CSN pwell
+		and AB
+		and-not XTP
+		shrink 690
+		grow 770
+		or XSN
+		grow 125
+		and CWP
+		and-not XTP
+		shrink 55
+		grow 55
+		calma 45 0
+	layer CSP nwell
+		and AB
+		and-not XTN
+		shrink 690
+		grow 770
+		or XSP
+		grow 125
+		and CWN
+		and-not XTN
+		shrink 55
+		grow 55
+		calma 44 0
+
+variant (55nm-vxlib)
+	layer CM1 *alu1
+		labels *alu1
+		and ab
+		calma 49 0
+	layer CM2 *alu2
+		labels *alu2
+		calma 51 0
+	templayer XTN *ntie
+		grow 40
+	templayer XTP *ptie
+		grow 40
+	layer CSN *ntie
+		grow 40
+		calma 45 0
+	layer CSP *ptie
+		grow 40
+		calma 44 0
+	layer CSN pwell
+		and ab
+		grow 125
+		and CWP
+		and-not XTP
+		calma 45 0
+	layer CSP nwell
+        and ab
+        grow 125
+        and CWN
+		and-not XTN
+		calma 44 0
+
+variant (55nm-sxlib)
+	layer CPD *pdif,pfet
+		labels *pdif,pfet
+		shrink 5
+		calma 4 0
+	layer CND *ndif,nfet
+		labels *ndif,nfet
+		shrink 5
+		calma 3 0
+	layer CPS *ptie
+		shrink 5
+		calma 6 0
+	layer CNS *ntie
+		shrink 5
+		calma 5 0
+	layer CAA *ndif,nfet,*pdif,pfet,*ntie,*ptie
+		labels *ndif,nfet,*pdif,pfet
+		shrink 5
+		calma 43 0
+	layer CM1 *alu1
+		labels *alu1
+		and ab
+		calma 49 0
+	layer CM2 *alu2
+		labels *alu2
+		calma 51 0
+	templayer XTN *ntie
+		grow 40
+	templayer XTP *ptie
+		grow 40
+	layer CSN *ntie
+		grow 40
+		calma 45 0
+	layer CSP *ptie
+		grow 40
+		calma 44 0
+	layer CSN pwell
+		and ab
+		grow 125
+		and CWP
+		and-not XTP
+		calma 45 0
+	layer CSP nwell
+        and ab
+        grow 125
+        and CWN
+		and-not XTN
+		calma 44 0
+
+variant *
+	render CWN 12  -1.000 1.000
+	render CAA 2   -0.067 0.450
+	render CPG 1    0.385 0.175
+	render CCC 20   0.560 0.315
+	render CM1 20   0.875 0.275
+	render CV1 20   1.150 0.475
+	render CM2 20   1.625 0.350
+	render CV2 20   1.975 0.475
+	render CM3 20   2.450 0.350
+	render CV3 20   2.800 0.475
+	render CM4 20   3.275 0.350
+	render CV4 20   3.625 0.475
+	render CM5 20   4.100 0.350
+	render CV5 20   4.450 0.600
+	render CM6 20   5.050 0.900
+
+style plot 
+    scalefactor 100
+	layer CM6 *alu6
+	layer CV5 via5/m5
+	layer CM5 *alu5
+	layer CV4 via4/m4
+	layer CM4 *alu4
+	layer CV3 via3/m3
+	layer CM3 *alu3
+	layer CV2 via2/m2
+	layer CM2 *alu2
+	layer CV1 via1/m1
+	layer CM1 *alu1
+	layer CCC ndifct/m1,pdifct/m1,ntiect/m1,ptiect/m1,polyct/m1
+	layer CPG *poly,nfet,pfet
+	layer CND *ndif,nfet
+	layer CPD *pdif,pfet
+	layer CNS *ntie
+	layer CPS *ptie
+    layer CPW pwell
+    layer CNW nwell
+end
+
+cifinput
+style pharosc200 variants (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+variant *
+	scalefactor 100
+	layer ab AB
+	layer pwell CWP
+		grow 100
+		and-not CWN
+		shrink 100
+		grow 100
+		labels CWP
+	layer nwell CWN
+		grow 100
+		and-not CWP
+		shrink 100
+		grow 100
+		labels CWN
+#	layer pimp CSP
+#	layer nimp CSN
+	layer poly CPG
+		labels CPG
+	layer pdif CPD
+		labels CPD
+	layer ndif CND
+		labels CND
+	layer ntie CNS
+	layer ptie CPS
+	layer nfet CPG
+		and CND
+	layer pfet CPG
+		and CPD
+	layer alu0 CM0
+		and-not CM1
+		grow 100
+		shrink 100
+		labels CM0
+	layer alu1 CM1
+		grow 100
+		shrink 100
+		labels CM1
+	layer ndifct0 CCC
+		and CM0
+		and-not CM1
+		and CND
+	layer ndifct1 CCC
+		and CM1
+		and CND
+	layer pdifct0 CCC
+		and CM0
+		and-not CM1
+		and CPD
+	layer pdifct1 CCC
+		and CM1
+		and CPD
+	layer ntiect0 CCC
+		and CM0
+		and-not CM1
+		and CNS
+	layer ntiect1 CCC
+		and CM1
+		and CNS
+	layer ptiect0 CCC
+		and CM0
+		and-not CM1
+		and CPS
+	layer ptiect1 CCC
+		and CM1
+		and CPS
+	layer polyct0 CCC
+		and CM0
+		and-not CM1
+		and CPG
+	layer polyct1 CCC
+		and CM1
+		and CPG
+	layer via1 CV1
+		and CM2
+		and CM1
+	layer alu2 CM2
+		grow 100
+		shrink 100
+		labels CM2
+	layer via2 CV2
+		and CM3
+		and CM2
+	layer alu3 CM3
+		grow 100
+		shrink 100
+		labels CM3
+	layer via3 CV3
+		and CM4
+		and CM3
+	layer alu4 CM4
+		grow 100
+		shrink 100
+		labels CM4
+	layer via4 CV4
+		and CM5
+		and CM4
+	layer alu5 CM5
+		grow 100
+		shrink 100
+		labels CM5
+	layer via5 CV5
+		and CM6
+		and CM5
+	layer alu6 CM6
+		grow 300
+		shrink 300
+		labels CM6
+	ignore CSN,CSP,CAA,REF,TM1,TM1,TM3,TM4,TM5,TM6
+	calma CCC 25 *
+	calma CWP 41 *
+	calma CWN 42 *
+	calma CND  3 *
+	calma CPD  4 *
+	calma CNS  5 *
+	calma CPS  6 *
+	calma CPG 46 *
+	calma CM0 48 *
+	calma CM1 49 *
+	calma CV1 50 *
+	calma CM2 51 *
+	calma CV2 61 *
+	calma CM3 62 *
+	calma CV3 30 *
+	calma CM4 31 *
+	calma CV4 32 *
+	calma CM5 33 *
+	calma CV5 36 *
+	calma CM6 37 *
+	calma AB  63 *
+
+style pharosc200-55nm
+# Special cifinput for extraction only. Use with extraction style pharosc200-55nm.
+# Doesn't work right now as the poly grow is off a lambda grid of 1000 nanometers
+# and the cif read routine snaps it back to its original position. Eg:
+# Warning at line 138 of CIF file: Input off lambda grid by 9/100; snapped to grid.
+	scalefactor 1000 nanometers
+	layer ab AB
+	layer pwell CWP
+	layer nwell CWN
+#	layer pimp CSP
+#	layer nimp CSN
+	layer poly CPG
+		grow 18
+		labels CPG
+	layer pdif CPD
+		labels CPD
+	layer ndif CND
+		labels CND
+	layer ntie CNS
+	layer ptie CPS
+	layer nfet CPG
+		grow 18
+		and CND
+	layer pfet CPG
+		grow 18
+		and CPD
+	layer alu1 CM1
+		or CM0
+		labels CM1
+	layer ndifct0 CCC
+		and CM0
+		and-not CM1
+		and CND
+	layer ndifct1 CCC
+		and CM1
+		and CND
+	layer pdifct0 CCC
+		and CM0
+		and-not CM1
+		and CPD
+	layer pdifct1 CCC
+		and CM1
+		and CPD
+	layer ntiect0 CCC
+		and CM0
+		and-not CM1
+		and CNS
+	layer ntiect1 CCC
+		and CM1
+		and CNS
+	layer ptiect0 CCC
+		and CM0
+		and-not CM1
+		and CPS
+	layer ptiect1 CCC
+		and CM1
+		and CPS
+	layer polyct0 CCC
+		and CM0
+		and-not CM1
+		and CPG
+	layer polyct1 CCC
+		and CM1
+		and CPG
+	layer via1 CV1
+		and CM2
+		and CM1
+	layer alu2 CM2
+		labels CM2
+	layer via2 CV2
+		and CM3
+		and CM2
+	layer alu3 CM3
+		labels CM3
+	layer via3 CV3
+		and CM4
+		and CM3
+	layer alu4 CM4
+		labels CM4
+	layer via4 CV4
+		and CM5
+		and CM4
+	layer alu5 CM5
+		labels CM5
+	layer via5 CV5
+		and CM6
+		and CM5
+	layer alu6 CM6
+		labels CM6
+	ignore CWN,CWP,CSN,CSP,CAA,REF,TM1,TM1,TM3,TM4,TM5,TM6
+	calma CCC 25 *
+	calma CWP 41 *
+	calma CWN 42 *
+	calma CND  3 *
+	calma CPD  4 *
+	calma CNS  5 *
+	calma CPS  6 *
+	calma CPG 46 *
+	calma CM0 48 *
+	calma CM1 49 *
+	calma CV1 50 *
+	calma CM2 51 *
+	calma CV2 61 *
+	calma CM3 62 *
+	calma CV3 30 *
+	calma CM4 31 *
+	calma CV4 32 *
+	calma CM5 33 *
+	calma CV5 36 *
+	calma CM6 37 *
+	calma AB  63 *
+
+#style pharosc013-55nm
+#	scalefactor 5 nanometers
+# Special cifinput for extraction only. Matches extraction style pharosc013-55nm.
+# Doesn't work because the scalefactor value means 1 Magic db unit = 10nm and we
+# want a resolution of 5nm. So reading in 0.13um layout gives errors like
+# Warning at line 123 of CIF file: Input off lambda grid by 17/25; snapped to grid.
+# The scalefactor has to be 5nm and the extraction lambda 0.5, but an extraction
+# lambda less than 1 fails to extract with an error like
+# Couldn't find transistor at 240 143
+# Error in extracting node a_266_143#
+# As a workaround at this time, use cifinput with
+# scalefactor 1 nanometers
+# and extraction
+# lambda 0.1
+# and forget about doing RC extraction.
+style pharosc013-55nm
+	scalefactor 1 nanometers
+	layer ab AB
+	layer pwell CWP
+	layer nwell CWN
+#	layer pimp CSP
+#	layer nimp CSN
+	layer poly CPG
+		grow 5
+		labels CPG
+	layer pdif CPD
+		labels CPD
+	layer ndif CND
+		labels CND
+	layer ntie CNS
+	layer ptie CPS
+	layer nfet CPG
+		grow 5
+		and CND
+	layer pfet CPG
+		grow 5
+		and CPD
+	layer alu1 CM1
+		or CM0
+		labels CM1
+	layer ndifct0 CCC
+		and CM0
+		and-not CM1
+		and CND
+	layer ndifct1 CCC
+		and CM1
+		and CND
+	layer pdifct0 CCC
+		and CM0
+		and-not CM1
+		and CPD
+	layer pdifct1 CCC
+		and CM1
+		and CPD
+	layer ntiect0 CCC
+		and CM0
+		and-not CM1
+		and CNS
+	layer ntiect1 CCC
+		and CM1
+		and CNS
+	layer ptiect0 CCC
+		and CM0
+		and-not CM1
+		and CPS
+	layer ptiect1 CCC
+		and CM1
+		and CPS
+	layer polyct0 CCC
+		and CM0
+		and-not CM1
+		and CPG
+	layer polyct1 CCC
+		and CM1
+		and CPG
+	layer via1 CV1
+		and CM2
+		and CM1
+	layer alu2 CM2
+		labels CM2
+	layer via2 CV2
+		and CM3
+		and CM2
+	layer alu3 CM3
+		labels CM3
+	layer via3 CV3
+		and CM4
+		and CM3
+	layer alu4 CM4
+		labels CM4
+	layer via4 CV4
+		and CM5
+		and CM4
+	layer alu5 CM5
+		labels CM5
+	layer via5 CV5
+		and CM6
+		and CM5
+	layer alu6 CM6
+		labels CM6
+	ignore CWN,CWP,CSN,CSP,CAA,REF,TM1,TM1,TM3,TM4,TM5,TM6
+	calma CCC 25 *
+	calma CWP 41 *
+	calma CWN 42 *
+	calma CND  3 *
+	calma CPD  4 *
+	calma CNS  5 *
+	calma CPS  6 *
+	calma CPG 46 *
+	calma CM0 48 *
+	calma CM1 49 *
+	calma CV1 50 *
+	calma CM2 51 *
+	calma CV2 61 *
+	calma CM3 62 *
+	calma CV3 30 *
+	calma CM4 31 *
+	calma CV4 32 *
+	calma CM5 33 *
+	calma CV5 36 *
+	calma CM6 37 *
+	calma AB  63 *
+end
+
+mzrouter
+	style irouter
+# weights are for vertical M2 and horizontal M3
+#				layer	hCost	vCost	jogCost	hintCost	overCost
+	layer		alu6	4096	512		1024	4			1024
+	layer		alu5	256		2048	256		4			512
+	layer		alu4	1024	128		128		4			256
+	layer		alu3	64		512		64		4			128
+	layer		alu2	256		32		32		4			64
+	layer		alu1	32		32		32		4			64
+	layer		poly	2048	2048	16		4			4096
+	contact		via5	alu5	alu6	2048
+	contact		via4	alu4	alu5	2048
+	contact		via3	alu3	alu4	1024
+	contact		via2	alu2	alu3	512
+	contact		via1	alu1	alu2	256
+	contact		polyct1	poly	alu1	2048
+	notactive	poly	polyct1
+  style garouter
+# values are the same as irouter
+	layer		alu6	4096	512		1024	4			1024
+	layer		alu5	256		2048	256		4			512
+	layer		alu4	1024	128		128		4			256
+	layer		alu3	64		512		64		4			128
+	layer		alu2	256		32		32		4			64
+	layer		alu1	32		32		32		4			64
+	layer		poly	2048	2048	16		4			4096
+	contact		via5	alu5	alu6	2048
+	contact		via4	alu4	alu5	2048
+	contact		via3	alu3	alu4	1024
+	contact		via2	alu2	alu3	512
+	contact		via1	alu1	alu2	256
+	contact		polyct1	poly	alu1	2048
+	notactive	poly	polyct1
+end
+
+drc
+	style pharosc200 variants (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	scalefactor 100
+# WELL RULES
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib)
+    width nwell 1600									"110 1.1  NWELL  Width < 16"
+    width pwell 1600									"111 1.1  PWELL  Width < 16"
+	spacing nwell nwell 1800 touching_ok				"130 1.3  NWELL  Space < 18"
+	spacing pwell pwell 1800 touching_ok				"131 1.3  PWELL  Space < 18"
+
+	variant (1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	width nwell 800										"112 1.1  NWELL  Width < 8"
+	width pwell 1400									"113 1.1  PWELL  Width < 14"
+	spacing nwell nwell 2400 touching_ok				"132 1.3  NWELL  Space < 24"
+	spacing pwell pwell 800 touching_ok					"133 1.3  PWELL  Space < 8"
+
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	spacing nwell pwell 1200 touching_ok				"140 1.4  NWELL to PWELL  Space < 12"
+	edge4way nwell pwell 1800 pwell pwell 1800			"141 1.4  NWELL and PWELL  must not overlap"
+	edge4way pwell nwell 1800 nwell nwell 1800			"142 1.4  NWELL and PWELL  must not overlap"
+# DIFFUSION RULES
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	width *ndif,nfet 400								"210 2.1a NDIF  Width < 4"
+	width *pdif,pfet 400		 						"211 2.1a PDIF  Width < 4"
+	width *ntie 400		 								"212 2.1b NTIE  Width < 4"
+	width *ptie 400 									"213 2.1b PTIE  Width < 4"
+
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib)
+    spacing *ndif,nfet *ndif,nfet 400 touching_ok		"220 2.2a NDIF  Space < 4"
+    spacing *pdif,pfet *pdif,pfet 400 touching_ok		"221 2.2a PDIF  Space < 4"
+    spacing *ntie *ntie 400 touching_ok				 	"222 2.2b NTIE  Space < 4"
+    spacing *ptie *ptie 400 touching_ok				 	"223 2.2b PTIE  Space < 4"
+    spacing *ndif,nfet nwell 600 touching_illegal 		"230 2.3a NDIF to NWELL Space < 6"
+
+	variant (1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	spacing *ndif,nfet *ndif,nfet 500 touching_ok		"224 2.2a NDIF  Space < 5"
+	spacing *pdif,pfet *pdif,pfet 500 touching_ok		"225 2.2a PDIF  Space < 5"
+	spacing *ntie *ntie 500 touching_ok				 	"226 2.2b NTIE  Space < 5"
+	spacing *ptie *ptie 500 touching_ok				 	"227 2.2b PTIE  Space < 5"
+	spacing *ndif,nfet nwell 900 touching_illegal 		"231 2.3a NDIF to NWELL Space < 9"
+
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	spacing *pdif,pfet pwell 600 touching_illegal 		"232 2.3b PDIF to PWELL Space < 6"
+
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib)
+	spacing *ptie nwell 500 touching_illegal 			"240 2.4a PTIE to NWELL Space < 5"
+	spacing *ntie pwell 500 touching_illegal	 		"241 2.4b NTIE to PWELL Space < 5"
+	spacing *ndif *ptie 400 touching_illegal			"250 2.5  NDIF to PTIE Space < 4"
+	spacing *pdif *ntie 400 touching_illegal			"251 2.5  PDIF to NTIE Space < 4"
+	spacing *ndif,nfet *pdif,pfet 1200 touching_illegal "280 2.8a NDIF to PDIF Space < 12"
+	spacing *ndif,nfet *ntie 1100 touching_illegal 		"281 2.8b NDIF to NTIE Space < 11"
+	spacing *pdif,pfet *ptie 1100 touching_illegal 		"282 2.8b PDIF to PTIE Space < 11"
+	spacing *ntie *ptie 1000 touching_illegal 			"282 2.8c NTIE to PTIE Space < 10"
+
+	variant (1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	spacing *ptie nwell 900 touching_illegal 			"242 2.4a PTIE to NWELL Space < 9"
+	spacing *ntie pwell 700 touching_illegal	 		"243 2.4b NTIE to PWELL Space < 7"
+	spacing *ndif *ptie 500 touching_illegal			"252 2.5  NDIF to PTIE Space < 5"
+	spacing *pdif *ntie 500 touching_illegal			"253 2.5  PDIF to NTIE Space < 5"
+	spacing *ndif,nfet *pdif,pfet 1600 touching_illegal "283 2.8a NDIF to PDIF Space < 16"
+	spacing *ndif,nfet *ntie 1600 touching_illegal 		"284 2.8b NDIF to NTIE Space < 16"
+	spacing *pdif,pfet *ptie 1600 touching_illegal 		"285 2.8b PDIF to PTIE Space < 16"
+	spacing *ntie *ptie 1600 touching_illegal 			"286 2.8c NTIE to PTIE Space < 16"
+# POLY RULES
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	width *poly,nfet,pfet 200 							"310 3.1  POLY  Width < 2"
+	spacing *poly *poly 400 touching_ok					"320 3.2  POLY  Space < 4"
+
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib)
+	spacing nfet nfet 500 touching_ok 					"321 3.2a N-CHANNEL  Space < 5"
+	spacing pfet pfet 500 touching_ok 					"322 3.2a P-CHANNEL  Space < 5"
+
+	variant (1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	spacing nfet nfet 600 touching_ok 					"323 3.2a N-CHANNEL  Space < 6"
+	spacing pfet pfet 600 touching_ok 					"324 3.2a P-CHANNEL  Space < 6"
+
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib),(1um-vxlib)
+	overhang poly nfet 400								"330 3.3  POLY overlap of N-transistor < 4 (endcap rule)"
+	overhang poly pfet 400								"331 3.3  POLY overlap of P-transistor < 4 (endcap rule)"
+	overhang *ndif nfet 500								"340 3.4  NDIF overlap of transistor < 5 (s/d width rule)"
+	overhang *pdif pfet 500								"341 3.4  PDIF overlap of transistor < 5 (s/d width rule)"
+
+	variant (1um-sxlib)
+	overhang poly nfet 300								"330 3.3  POLY overlap of N-transistor < 3 (endcap rule)"
+	overhang poly pfet 300								"331 3.3  POLY overlap of P-transistor < 3 (endcap rule)"
+	overhang *ndif nfet 400								"340 3.4  NDIF overlap of transistor < 4 (s/d width rule)"
+	overhang *pdif pfet 400								"341 3.4  PDIF overlap of transistor < 4 (s/d width rule)"
+
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+# basic spacing rule like "spacing poly ndif 2 touching_ok "3.5" " does not work. I don't know why
+	edge4way ndif space/a 200 ~(poly)/a space/a 200		"350 3.5  NDIF to POLY Space < 2"
+	edge4way pdif space/a 200 ~(poly)/a space/a 200		"351 3.5  PDIF to POLY Space < 2"
+# Rule 3.5a should be checked by the following 2 lines but they don't work
+	spacing nfet *poly 300 touching_ok					"352 3.5a POLY to N-transistor Space < 3"
+	spacing pfet *poly 300 touching_ok					"353 3.5a POLY to P-transistor Space < 3"
+# IMPLANT RULES
+#	spacing nimp pfet 500 touching_illegal				"410 4.1a  NIMP to CHANNEL  Space < 5"
+#	spacing pimp nfet 500 touching_illegal				"411 4.1a  PIMP to CHANNEL  Space < 5"
+	spacing pfet ntie 600 touching_illegal 				"412 4.1a+4.2b NTIE to P-Transistor Space < 6"
+	spacing nfet ptie 600 touching_illegal		 		"413 4.1a+4.2b PTIE to N-Transistor Space < 6"
+# CONTACT RULES
+	width polyct/a 200								 	"510 5.1  POLY CONTACT  Width < 2"
+	maxwidth polyct/a 200							 	"511 5.1  POLY CONTACT  Width > 2"
+	rect_only polyct/a									"512 5.1  POLY CONTACT must be rectangular"
+	surround polyct/a poly 200 absence_illegal			"520 5.2  POLY Overlap of CONTACT < 2"
+	spacing polyct/a polyct/a 500 touching_ok			"530 5.3  POLY CONTACT  Space < 5"
+
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib)
+	spacing polyct/a nfet 300 touching_illegal			"540 5.4  POLY CONTACT to N-CHANNEL  Space < 3"
+	spacing polyct/a pfet 300 touching_illegal			"541 5.4  POLY CONTACT to P-CHANNEL  Space < 3"
+
+	variant (1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	spacing polyct/a nfet 400 touching_illegal			"542 5.4  POLY CONTACT to N-CHANNEL  Space < 4"
+	spacing polyct/a pfet 400 touching_illegal			"543 5.4  POLY CONTACT to P-CHANNEL  Space < 4"
+
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	width ndifct/a 200								 	"610 6.1  NDIF CONTACT  Width < 2"
+	width pdifct/a 200								 	"611 6.1  PDIF CONTACT  Width < 2"
+	width ntiect/a 200								 	"612 6.1  NTIE CONTACT  Width < 2"
+	width ptiect/a 200								 	"613 6.1  PTIE CONTACT  Width < 2"
+	maxwidth ndifct/a 200							 	"614 6.1  NDIF CONTACT  Width > 2"
+	maxwidth pdifct/a 200							 	"615 6.1  PDIF CONTACT  Width > 2"
+	maxwidth ntiect/a 200							 	"616 6.1  NTIE CONTACT  Width > 2"
+	maxwidth ptiect/a 200							 	"617 6.1  PTIE CONTACT  Width > 2"
+	rect_only ndifct/a									"618 6.1  NDIF CONTACT must be rectangular"
+	rect_only pdifct/a									"619 6.1  PDIF CONTACT must be rectangular"
+	rect_only ntiect/a									"6110 6.1  NTIE CONTACT must be rectangular"
+	rect_only ptiect/a									"6111 6.1  PTIE CONTACT must be rectangular"
+	surround ndifct/a ndif 200 absence_illegal			"620 6.2a NDIF Overlap of CONTACT < 2"
+	surround pdifct/a pdif 200 absence_illegal			"621 6.2a PDIF Overlap of CONTACT < 2"
+	surround ntiect/a ntie 200 absence_illegal			"622 6.2b NTIE Overlap of CONTACT < 2"
+	surround ptiect/a ptie 200 absence_illegal			"623 6.2b PTIE Overlap of CONTACT < 2"
+	spacing ndifct/a ndifct/a 500 touching_ok			"631 6.3a NDIF CONTACT  Space < 5"
+	spacing pdifct/a pdifct/a 500 touching_ok			"632 6.3a PDIF CONTACT  Space < 5"
+	spacing ntiect/a ntiect/a 500 touching_ok			"633 6.3b NTIE CONTACT  Space < 5"
+	spacing ptiect/a ptiect/a 500 touching_ok			"634 6.3b PTIE CONTACT  Space < 5"
+
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib)
+    spacing ndifct/a nfet 300 touching_illegal			"640 6.4  NDIF CONTACT to CHANNEL  Space < 3"
+    spacing pdifct/a pfet 300 touching_illegal			"641 6.4  PDIF CONTACT to CHANNEL  Space < 3"
+
+	variant (1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+    spacing ndifct/a nfet 400 touching_illegal			"642 6.4  NDIF CONTACT to CHANNEL  Space < 4"
+    spacing pdifct/a pfet 400 touching_illegal			"643 6.4  PDIF CONTACT to CHANNEL  Space < 4"
+# METAL-1 RULES	
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib)
+	width *alu0,*alu1 400								"710 7.1  METAL-1  Width < 4"
+    spacing allalu0 *alu0,*alu1 300 touching_ok			"721 7.2  METAL-1  Space < 3"
+    spacing allalu1 allalu1 400 touching_ok				"722 7.2  METAL-1  Space < 4 (when via above)"
+
+	variant (1um-vsxlib),(1um-ssxlib),(1um-vxlib)
+	width *alu0,*alu1 400								"710 7.1  METAL-1  Width < 4"
+    spacing allalu0 *alu0,*alu1 400 touching_ok			"721 7.2  METAL-1  Space < 4"
+    spacing allalu1 allalu1 400 touching_ok				"722 7.2  METAL-1  Space < 4 (when via above)"
+
+	variant (1um-sxlib)
+	width *alu0,*alu1 200								"710 7.1  METAL-1  Width < 2"
+    spacing allalu0 *alu0,*alu1 600 touching_ok			"721 7.2  METAL-1  Space < 6"
+    spacing allalu1 allalu1 400 touching_ok				"722 7.2  METAL-1  Space < 6 (when via above)"
+
+	variant (1um-vsclib),(1um-wsclib),(1um-rgalib),(1um-vgalib),(1um-vsxlib),(1um-ssxlib),(1um-vxlib),(1um-sxlib)
+	surround polyct/m1 alu0,alu1 100 absence_illegal	"730 7.3a METAL-1 side Overlap of POLY CONTACT < 1"
+	surround ndifct/m1 alu0,alu1 100 absence_illegal	"731 7.3a METAL-1 side Overlap of NDIF CONTACT < 1"
+	surround pdifct/m1 alu0,alu1 100 absence_illegal	"732 7.3a METAL-1 side Overlap of PDIF CONTACT < 1"
+	surround ntiect/m1 alu0,alu1 100 absence_illegal	"733 7.3a METAL-1 side Overlap of NTIE CONTACT < 1"
+	surround ptiect/m1 alu0,alu1 100 absence_illegal	"734 7.3a METAL-1 side Overlap of PTIE CONTACT < 1"
+# wide metal width set to 8 to check vsclib supply (which is 16 in flip and abut layout)
+	widespacing allalu1 800 *alu0,*alu1 500 touching_ok	"740 7.4  Wide METAL-1  Space < 5"
+# VIA1 RULES
+	width via1/m1 200								 	"810 8.1  VIA1  Width < 2"
+	maxwidth via1/m1 200							 	"811 8.1  VIA1  Width > 2"
+	rect_only via1/m1									"812 8.1  VIA1 must be rectangular"
+	spacing via1/m1 via1/m1 600 touching_ok				"820 8.2  VIA1  Space < 6"
+	surround via1/m1 alu1 100 absence_illegal			"830 8.3a METAL-1 side Overlap of VIA1 < 1"
+# METAL-2 RULES
+	width *alu2 400										"910 9.1  METAL-2  Width < 4"
+    spacing *alu2 *alu2 400 touching_ok					"920 9.2  METAL-2  Space < 4"
+	surround via1/m2 alu2 100 absence_illegal			"930 9.3a METAL-2 side Overlap of VIA1 < 1"
+	widespacing *alu2 1200 *alu2 500 touching_ok		"940 9.4  Wide METAL-2  Space < 5"
+# VIA2 RULES
+	width via2/m2 200								 	"1410 14.1  VIA2  Width < 2"
+	maxwidth via2/m2 200							 	"1411 14.1  VIA2  Width > 2"
+	rect_only via2/m2									"1412 14.1  VIA2 must be rectangular"
+	spacing via2/m2 via2/m2 600 touching_ok				"1420 14.2  VIA2  Space < 6"
+	surround via2/m2 alu2 100 absence_illegal			"1430 14.3a METAL-2 side Overlap of VIA2 < 1"
+# METAL-3 RULES
+	width *alu3 400										"1510 15.1  METAL-3  Width < 4"
+    spacing *alu3 *alu3 400 touching_ok					"1520 15.2  METAL-3  Space < 4"
+	surround via2/m3 alu3 100 absence_illegal			"1530 15.3a METAL-3 side Overlap of VIA2 < 1"
+	widespacing *alu3 1200 *alu3 500 touching_ok		"1540 15.4  Wide METAL-3  Space < 5"
+# VIA3 RULES
+	width via3/m3 200								 	"2110 21.1  VIA3  Width < 2"
+	maxwidth via3/m3 200							 	"2111 21.1  VIA3  Width > 2"
+	rect_only via3/m3									"2112 21.1  VIA3 must be rectangular"
+	spacing via3/m3 via3/m3 600 touching_ok				"2120 21.2  VIA3  Space < 6"
+	surround via3/m3 alu3 100 absence_illegal			"2130 21.3a METAL-3 side Overlap of VIA3 < 1"
+# METAL-4 RULES
+	width *alu4 400										"2210 22.1.01  METAL-4  Width < 4"
+    spacing *alu4 *alu4 400 touching_ok					"2220 22.2.01  METAL-4  Space < 4"
+	surround via3/m4 alu4 100 absence_illegal			"2230 22.3a.01 METAL-4 side Overlap of VIA3 < 1"
+	widespacing *alu4 1200 *alu4 500 touching_ok		"2240 22.4.01  Wide METAL-4  Space < 5"
+# VIA4 RULES
+	width via4/m4 200								 	"2510 25.1  VIA4  Width < 2"
+	maxwidth via4/m4 200							 	"2511 25.1  VIA4  Width > 2"
+	rect_only via4/m4									"2512 25.1  VIA4 must be rectangular"
+	spacing via4/m4 via4/m4 600 touching_ok				"2520 25.2  VIA4  Space < 6"
+	surround via4/m4 alu4 100 absence_illegal			"2530 25.3a METAL-4 side Overlap of VIA4 < 1"
+# METAL-5 RULES
+	width *alu5 400										"2610 26.1  METAL-5  Width < 4"
+    spacing *alu5 *alu5 400 touching_ok					"2620 26.2  METAL-5  Space < 4"
+	surround via4/m5 alu5 100 absence_illegal			"2630 26.3a METAL-5 side Overlap of VIA4 < 1"
+	widespacing *alu5 1200 *alu5 500 touching_ok		"2640 26.4  Wide METAL-5  Space < 5"
+# VIA5 RULES
+	width via5/m5 400								 	"2910 29.1  VIA5  Width < 4"
+	maxwidth via5/m5 400							 	"2911 29.1  VIA5  Width > 4"
+	rect_only via5/m5									"2912 29.1  VIA5 must be rectangular"
+	spacing via5/m5 via5/m5 1200 touching_ok			"2920 29.2  VIA5  Space < 12"
+	surround via5/m5 alu5 200 absence_illegal			"2930 29.3a METAL-5 side Overlap of VIA5 < 2"
+# METAL-6 RULES
+	width *alu6 800										"3010 30.1  METAL-6  Width < 8"
+    spacing *alu6 *alu6 800 touching_ok					"3020 30.2  METAL-6  Space < 8"
+	surround via5/m6 alu6 400 absence_illegal			"3030 30.3a METAL-6 side Overlap of VIA5 < 4"
+
+	style pharosc013 variants (55nm-vsclib),(55nm-wsclib),(55nm-rgalib),(55nm-vgalib),(55nm-vsxlib),(55nm-ssxlib),(55nm-vxlib),(55nm-sxlib)
+	variant (55nm-vsclib)
+		cifstyle pharosc013(55nm-vsclib)
+	variant (55nm-wsclib)
+		cifstyle pharosc013(55nm-wsclib)
+	variant (55nm-rgalib)
+		cifstyle pharosc013(55nm-rgalib)
+	variant (55nm-vgalib)
+		cifstyle pharosc013(55nm-vgalib)
+	variant (55nm-vsxlib)
+		cifstyle pharosc013(55nm-vsxlib)
+	variant (55nm-ssxlib)
+		cifstyle pharosc013(55nm-ssxlib)
+	variant (55nm-vxlib)
+		cifstyle pharosc013(55nm-vxlib)
+	variant (55nm-sxlib)
+		cifstyle pharosc013(55nm-sxlib)
+	variant *
+# cifwidth and cifmaxwidth values are twice the checked value for some unknown reason
+# WELL RULES
+    cifwidth CWN 132								"110 1.1  NWELL  Width < 0.66"
+    cifwidth CWP 132								"111 1.1  PWELL  Width < 0.66"
+	cifspacing CWN CWN 132 touching_ok				"130 1.3  NWELL  Space < 0.66"
+	cifspacing CWP CWP 132 touching_ok				"131 1.3  PWELL  Space < 0.66"
+# DIFFUSION RULES
+    cifwidth CAA 40									"210 2.1a DIF  Width < 0.20"
+    cifspacing CAA CAA 20 touching_ok				"220 2.2a DIF  Space < 0.20"
+# POLY RULES
+    cifwidth CPG 24 								"310 3.1  POLY  Width < 0.12"
+    cifspacing CPG CPG 20 touching_ok				"320 3.2  POLY  Space < 0.20"
+# IMPLANT RULES
+	cifwidth CSP 48									"440 4.4  PIMP  Width < 0.24"
+	cifwidth CSN 48									"441 4.4  NIMP  Width < 0.24"
+	cifspacing CSP CSP 24 touching_ok				"450 4.5a PIMP  Space < 0.24"
+	cifspacing CSN CSN 24 touching_ok				"451 4.5a NIMP  Space < 0.24"
+# CONTACT RULES
+	cifwidth CCC 32								 	"510 5.1  CONTACT  Width < 0.16"
+	cifmaxwidth CCC 32 bend_illegal					"511 5.1  CONTACT  Width > 0.16"
+	cifspacing CCC CCC 20 touching_ok				"630 6.3  CONTACT  Space < 0.20"
+	cifspacing CCC CPG 12 touching_illegal			"640 6.4  CONTACT to CHANNEL  Space < 0.12"
+# METAL-1 RULES	
+	cifwidth CM1 38									"710 7.1  METAL-1  Width < 0.18"
+    cifspacing CM1 CM1 18 touching_ok				"720 7.2  METAL-1  Space < 0.18"
+	cifarea CM1 1452 88								"METAL-1  Area < 0.1452 to be checked"
+# VIA1 RULES
+	cifwidth CV1 40								 	"810 8.1  VIA1  Width < 0.20"
+	cifmaxwidth CV1 40 bend_illegal					"811 8.1  VIA1  Width > 0.20"
+	cifspacing CV1 CV1 24 touching_ok				"820 8.2  VIA1  Space < 0.24"
+# METAL-2 RULES
+	cifwidth CM2 44									"910 9.1  METAL-2  Width < 0.22"
+    cifspacing CM2 CM2 22 touching_ok				"920 9.2  METAL-2  Space < 0.22"
+	cifarea CM2 1452 88								"METAL-2  Area < 0.1452 to be checked"
+# VIA2 RULES
+	cifwidth CV2 40								 	"1410 14.1  VIA2  Width < 0.20"
+	cifmaxwidth CV2 40 bend_illegal					"1411 14.1  VIA2  Width > 0.20"
+	cifspacing CV2 CV2 24 touching_ok				"1420 14.2  VIA2  Space < 0.24"
+# METAL-3 RULES
+	cifwidth CM3 44									"1510 15.1  METAL-3  Width < 0.22"
+    cifspacing CM3 CM3 22 touching_ok				"1520 15.2  METAL-3  Space < 0.22"
+	cifarea CM3 1452 88								"METAL-3  Area < 0.1452 to be checked"
+# VIA3 RULES
+	cifwidth CV3 40								 	"2110 21.1  VIA3  Width < 0.20"
+	cifmaxwidth CV3 40 bend_illegal					"2111 21.1  VIA3  Width > 0.20"
+	cifspacing CV3 CV3 24 touching_ok				"2120 21.2  VIA3  Space < 0.24"
+# METAL-4 RULES
+	cifwidth CM4 44									"2210 22.1  METAL-4  Width < 0.22"
+    cifspacing CM4 CM4 22 touching_ok				"2220 22.2  METAL-4  Space < 0.22"
+	cifarea CM4 1452 88								"METAL-4  Area < 0.1452 to be checked"
+# VIA4 RULES
+	cifwidth CV4 40								 	"2510 25.1  VIA4  Width < 0.20"
+	cifmaxwidth CV4 40 bend_illegal					"2511 25.1  VIA4  Width > 0.20"
+	cifspacing CV4 CV4 24 touching_ok				"2520 25.2  VIA4  Space < 0.24"
+# METAL-5 RULES
+	cifwidth CM5 44									"2610 26.1  METAL-5  Width < 0.22"
+    cifspacing CM5 CM5 22 touching_ok				"2620 26.2  METAL-5  Space < 0.22"
+	cifarea CM5 1452 88								"METAL-5  Area < 0.1452 to be checked"
+# VIA5 RULES
+	cifwidth CV5 80								 	"2910 29.1  VIA5  Width < 0.40"
+	cifmaxwidth CV5 80 bend_illegal					"2911 29.1  VIA5  Width > 0.40"
+	cifspacing CV5 CV5 48 touching_ok				"2920 29.2  VIA5  Space < 0.48"
+# METAL-6 RULES
+	cifwidth CM6 88									"3010 30.1  METAL-6  Width < 0.44"
+    cifspacing CM6 CM6 44 touching_ok				"3020 30.2  METAL-6  Space < 0.44"
+	cifarea CM6 5632 128							"METAL-6  Area < 0.5632 to be checked"
+end
+
+extract
+# Prior to this DEC-07 file release, some extensive hacks were necessary in order
+# to produce satidfactory spice output decks. The flow is now clean for spice
+# decks with extracted C only. Extracted RC doesn't work yet.
+#
+# Previous versions of the library extracted with lambda=100 and then scaled the
+# esulting 2um spice decks by using a .options card in Spice:
+# .OPTIONS scale=0.055
+# This isn't needed any more. The new flow reads into Magic a 0.13um CIF file with
+# a drawn 0.12um channel length, oversizes the poly by 0.005um on each side and
+# extracts this circuit.
+#
+# The spice decks are formatted as shown below in a before and after spice listing
+# for a simple inverter.
+#
+# from ext2spice                                after formatting
+# --------------                                ----------------
+# M1000 vdd a z vdd p w=0.99u l=0.13u           .subckt iv1v0x1 a vdd vss z
+# + ad=0.543675p pd=3.28u as=0.341p ps=2.73u    m00 vdd    a      z      vdd p w=0.99u  l=0.13u  ad=0.543675p pd=3.28u  as=0.341p    ps=2.73u
+# M1001 vss a z vss n w=0.495u l=0.13u          m01 vss    a      z      vss n w=0.495u l=0.13u  ad=0.294525p pd=2.18u  as=0.167475p ps=1.74u
+# + ad=0.294525p pd=2.18u as=0.167475p ps=1.74u C0  vdd    z      0.014f
+# C0 vdd z 0.014fF                              C1  a      z      0.077f
+# C1 a z 0.077fF                                C2  z      vss    0.044f
+# C2 z vss 0.044fF                              C3  a      vss    0.120f
+# C3 a vss 0.120fF **FLOATING                   .ends
+# C4 vdd vss 0.051fF
+#
+# - A .subckt ... .ends wrapper is put around the spice deck. This allows multiple
+#   instances to be simulated together, and a single control deck to run with cells
+#   from different technologies by simply including different subckts. The .subckt
+#   header is grepped from the spice deck produced by the Alliance software (s2r).
+#   It should be noted that the Alliance s2r program directly produces a subckt file
+#   without the need for hacks.
+# - The mosfet continuation line is removed, and the fields are aligned. This
+#   substantially improves the readibility and eases any grepping. The mosfet
+#   identifiers are also made more reasonable (why start at 1000??).
+# - The string **FLOATING is removed. The pin is an input and not connected to any
+#   diffusion.
+# - The capacitors between vdd and vss are removed. This reduces the component count.
+#   They are pointless, even if investigating supply line IR drop with resistances
+#   in the supply, because the well capacitances are missing (and these are bigger
+#   than the fixed caps in the spice deck).
+# The script which beautifies the extracted spice deck is in alliance/bin/spice2spi_013.
+# The file magic/etc/$lib/$1.subckt contains the subckt header grepped from the
+# Alliance spice circuit.
+
+style	pharosc200-55nm
+# Matches cifinput style pharosc200-55nm.
+# Doesn't work at the moment because
+# a/ snapping problems described in the extraction section;
+# b/ the extracted spice deck with resistors has floating nodes and missing transistor
+#    area and perimeter diffusions. Eg
+# m00 a_55_190.t0  w1     z.t1         vdd pmos w=0.99u  l=0.11u  ad=0p pd=0u as=0p ps=0u
+# The capacitances below need to be checked along with the correct functioning of the
+# units microns statement.
+# Use cifinput read from a 0.13um written cif file and the extraction style pharosc013-55nm.
+	cscale		1
+	lambda		5.5
+	rscale		1
+	step		100
+# sidehalo set to (2X contacted metal-1 pitch)-(metal-1 width)-1 = 16-4-1=11
+	sidehalo	11
+#	units		microns
+	
+	planeorder	abutment	0
+	planeorder	well		1
+	planeorder	active		2
+	planeorder	metal1		3
+	planeorder	metal2		4
+	planeorder	metal3		5
+	planeorder	metal4		6
+	planeorder	metal5		7
+	planeorder	metal6		8
+	planeorder	oxide		9
+
+	resist	(ndif,ndifct)/a				6700
+	resist	(pdif,pdifct)/a				7320
+	resist	(ntie,ntiect)/a				4090
+	resist	(ptie,ptiect)/a				4090
+	resist	(nwell)/well				1207000
+	resist	(pwell)/well				1207000
+	resist	(poly,polyct,pmos,nmos)/a	7360
+	resist	(m1,via1)/m1				87
+	resist	(m2,via2)/m2				57
+	resist	(m3,via2)/m3				57
+	resist	(m4,via2)/m4				57
+	resist	(m5,via2)/m5				57
+	resist	(m6,via2)/m6				20
+
+	contact	ntiect	15610
+	contact ptiect	15530
+	contact	ndifct	15610
+	contact pdifct	15530
+	contact	polyct	11055
+	contact	via1	680
+	contact	via2	680
+	contact	via3	680
+	contact	via4	680
+	contact	via5	420
+
+#	plate		areacap, overlap
+#	coupling	sidewall
+#	fringing	perimc
+
+#POLY
+	areacap		(*poly)/a												0.2457
+	sidewall	(*poly)/a ~(*poly)/a ~(*poly)/a (*poly)/a				4.805
+	sidewall	(nmos)/a ~(nmos,*poly)/a ~(nmos,*poly)/a (nmos)/a		4.805
+	sidewall	(pmos)/a ~(pmos,*poly)/a ~(pmos,*poly)/a (pmos)/a		4.805
+	perimc		(*poly)/a ~(*poly)/a									0.3707
+
+#METAL-1
+	areacap		(allalu)/m1												0.1193
+	overlap		(allalu)/m1 (*ndif,*pdif)/a								0.2123
+	overlap		(allalu)/m1 (*poly)/a									0.3798
+	overlap		(allalu)/m1 (nmos,pmos)/a								0.3316
+	sidewall	(allalu)/m1 ~(allalu)/m1 ~(allalu)/m1 (allalu)/m1		7.769
+	perimc		(allalu)/m1 ~(allalu)/m1								0.2733
+	sideoverlap	(allalu)/m1 ~(allalu)/m1 (*ndif,*pdif)/a				0.5032
+	sideoverlap	(allalu)/m1 ~(allalu)/m1 (*poly)/a						0.8019
+	sideoverlap	(allalu)/m1 ~(allalu)/m1 (nmos,pmos)/a					0.7288
+
+#METAL-2
+	areacap		(allalu2)/m2											0.06421
+	overlap		(allalu2)/m2 (*ndif,*pdif)/a							0.08415		(allalu)/m1
+	overlap		(allalu2)/m2 (*poly)/a									0.1019		(allalu)/m1
+	overlap		(allalu2)/m2 (nmos,pmos)/a								0.09804		(allalu)/m1
+	overlap		(allalu2)/m2 (allalu)/m1								0.2199
+	sidewall	(allalu2)/m2 ~(allalu2)/m2 ~(allalu2)/m2 (allalu2)/m2	9.921
+	perimc		(allalu2)/m2 ~(allalu2)/m2								0.1699
+	sideoverlap	(allalu2)/m2 ~(allalu2)/m2 (*ndif,*pdif)/a				0.2398		(allalu)/m1
+	sideoverlap	(allalu2)/m2 ~(allalu2)/m2 (*poly)/a					0.3014		(allalu)/m1
+	sideoverlap	(allalu2)/m2 ~(allalu2)/m2 (nmos,pmos)/a				0.2882		(allalu)/m1
+	sideoverlap	(allalu2)/m2 ~(allalu2)/m2 (allalu)/m1					0.6397
+
+#METAL-3
+	areacap		(allalu3)/m3											0.04263
+	overlap		(allalu3)/m3 (*ndif,*pdif)/a							0.05060		(allalu)/m1,(allalu2)/m2
+	overlap		(allalu3)/m3 (*poly)/a									0.05651		(allalu)/m1,(allalu2)/m2
+	overlap		(allalu3)/m3 (nmos,pmos)/a								0.05527		(allalu)/m1,(allalu2)/m2
+	overlap		(allalu3)/m3 (allalu)/m1								0.08030		(allalu2)/m2
+	overlap		(allalu3)/m3 (allalu2)/m2								0.2199
+	sidewall	(allalu3)/m3 ~(allalu3)/m3 ~(allalu3)/m3 (allalu3)/m3	10.175
+	perimc		(allalu3)/m3 ~(allalu3)/m3								0.09570
+	sideoverlap	(allalu3)/m3 ~(allalu3)/m3 (*ndif,*pdif)/a				0.1221		(allalu)/m1,(allalu2)/m2
+	sideoverlap	(allalu3)/m3 ~(allalu3)/m3 (*poly)/a					0.1424		(allalu)/m1,(allalu2)/m2
+	sideoverlap	(allalu3)/m3 ~(allalu3)/m3 (nmos,pmos)/a				0.1386		(allalu)/m1,(allalu2)/m2
+	sideoverlap	(allalu3)/m3 ~(allalu3)/m3 (allalu)/m1					0.2266		(allalu2)/m2
+	sideoverlap	(allalu3)/m3 ~(allalu3)/m3 (allalu2)/m2					0.6397
+
+#METAL-4
+	areacap		(allalu4)/m4											0.03190
+	overlap		(allalu4)/m4 (*ndif,*pdif)/a							0.03616		(allalu)/m1,(allalu2)/m2,(allalu3)/m3
+	overlap		(allalu4)/m4 (*poly)/a									0.03905		(allalu)/m1,(allalu2)/m2,(allalu3)/m3
+	overlap		(allalu4)/m4 (nmos,pmos)/a								0.03850		(allalu)/m1,(allalu2)/m2,(allalu3)/m3
+	overlap		(allalu4)/m4 (allalu)/m1								0.04909		(allalu2)/m2,(allalu3)/m3
+	overlap		(allalu4)/m4 (allalu2)/m2								0.08030		(allalu3)/m3
+	overlap		(allalu4)/m4 (allalu3)/m3								0.2199
+	sidewall	(allalu4)/m4 ~(allalu4)/m4 ~(allalu4)/m4 (allalu4)/m4	10.274
+	perimc		(allalu4)/m4 ~(allalu4)/m4								0.06160
+	sideoverlap	(allalu4)/m4 ~(allalu4)/m4 (*ndif,*pdif)/a				0.07480		(allalu)/m1,(allalu2)/m2,(allalu3)/m3
+	sideoverlap	(allalu4)/m4 ~(allalu4)/m4 (*poly)/a					0.08360		(allalu)/m1,(allalu2)/m2,(allalu3)/m3
+	sideoverlap	(allalu4)/m4 ~(allalu4)/m4 (nmos,pmos)/a				0.08195		(allalu)/m1,(allalu2)/m2,(allalu3)/m3
+	sideoverlap	(allalu4)/m4 ~(allalu4)/m4 (allalu)/m1					0.1171		(allalu2)/m2,(allalu3)/m3
+	sideoverlap	(allalu4)/m4 ~(allalu4)/m4 (allalu2)/m2					0.2266		(allalu3)/m3
+	sideoverlap	(allalu4)/m4 ~(allalu4)/m4 (allalu3)/m3					0.6397
+
+#METAL-5
+	areacap		(allalu5)/m5											0.02544
+	overlap		(allalu5)/m5 (*ndif,*pdif)/a							0.02805		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	overlap		(allalu5)/m5 (*poly)/a									0.02984		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	overlap		(allalu5)/m5 (nmos,pmos)/a								0.02956		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	overlap		(allalu5)/m5 (allalu)/m1								0.03547		(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	overlap		(allalu5)/m5 (allalu2)/m2								0.04909		(allalu3)/m3,(allalu4)/m4
+	overlap		(allalu5)/m5 (allalu3)/m3								0.08030		(allalu4)/m4
+	overlap		(allalu5)/m5 (allalu4)/m4								0.2199
+	sidewall	(allalu5)/m5 ~(allalu5)/m5 ~(allalu5)/m5 (allalu5)/m5	10.663
+	perimc		(allalu5)/m5 ~(allalu5)/m5								0.04345
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (*ndif,*pdif)/a				0.05060		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (*poly)/a					0.05555		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (nmos,pmos)/a				0.05445		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (allalu)/m1					0.07260		(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (allalu2)/m2					0.1171		(allalu3)/m3,(allalu4)/m4
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (allalu3)/m3					0.2266		(allalu4)/m4
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (allalu4)/m4					0.6297
+
+#METAL-6
+	areacap		(allalu6)/m6											0.02069
+	overlap		(allalu6)/m6 (*ndif,*pdif)/a							0.02241		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	overlap		(allalu6)/m6 (*poly)/a									0.02344		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	overlap		(allalu6)/m6 (nmos,pmos)/a								0.02324		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	overlap		(allalu6)/m6 (allalu)/m1								0.02681		(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	overlap		(allalu6)/m6 (allalu2)/m2								0.03396		(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	overlap		(allalu6)/m6 (allalu3)/m3								0.04641		(allalu4)/m4,(allalu5)/m5
+	overlap		(allalu6)/m6 (allalu4)/m4								0.07329		(allalu5)/m5
+	overlap		(allalu6)/m6 (allalu5)/m5								0.1741
+	sidewall	(allalu6)/m6 ~(allalu6)/m6 ~(allalu6)/m6 (allalu6)/m6	25.443
+	perimc		(allalu6)/m6 ~(allalu6)/m6								0.1144
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (*ndif,*pdif)/a				0.1226		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (*poly)/a					0.1282		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (nmos,pmos)/a				0.1270		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (allalu)/m1					0.1452		(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (allalu2)/m2					0.1821		(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (allalu3)/m3					0.2475		(allalu4)/m4,(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (allalu4)/m4					0.3960		(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (allalu5)/m5					0.9213
+
+	device mosfet pmos pmos *pdif None vdd 109 1427
+	device mosfet nmos nmos *ndif None vss 245 1727
+
+#BASED ON VSCLIB iv1v0x3
+	fetresis	pmos	linear		9877
+	fetresis	nmos	linear		3800
+
+style	pharosc013-55nm
+	cscale		1
+	lambda		0.1
+	rscale		1
+	step		500
+# sidehalo set to (2X contacted metal-1 pitch)-(metal-1 width)-0.01 = 16*.055-0.22-0.01=0.65um
+	sidehalo	650
+#	units		microns
+	
+	planeorder	abutment	0
+	planeorder	well		1
+	planeorder	active		2
+	planeorder	metal1		3
+	planeorder	metal2		4
+	planeorder	metal3		5
+	planeorder	metal4		6
+	planeorder	metal5		7
+	planeorder	metal6		8
+	planeorder	oxide		9
+
+	resist	(ndif,ndifct)/a				6700
+	resist	(pdif,pdifct)/a				7320
+	resist	(ntie,ntiect)/a				4090
+	resist	(ptie,ptiect)/a				4090
+	resist	(nwell)/well				1207000
+	resist	(pwell)/well				1207000
+	resist	(poly,polyct,pmos,nmos)/a	7360
+	resist	(m1,via1)/m1				87
+	resist	(m2,via2)/m2				57
+	resist	(m3,via2)/m3				57
+	resist	(m4,via2)/m4				57
+	resist	(m5,via2)/m5				57
+	resist	(m6,via2)/m6				20
+
+	contact	ntiect	15610
+	contact ptiect	15530
+	contact	ndifct	15610
+	contact pdifct	15530
+	contact	polyct	11055
+	contact	via1	680
+	contact	via2	680
+	contact	via3	680
+	contact	via4	680
+	contact	via5	420
+
+#	plate		areacap, overlap
+#	coupling	sidewall
+#	fringing	perimc, sideoverlap
+
+#POLY
+	areacap		(*poly)/a												0.00008123
+	sidewall	(*poly)/a ~(*poly)/a ~(*poly)/a (*poly)/a				4.805
+	sidewall	(nmos)/a ~(nmos,*poly)/a ~(nmos,*poly)/a (nmos)/a		4.805
+	sidewall	(pmos)/a ~(pmos,*poly)/a ~(pmos,*poly)/a (pmos)/a		4.805
+	perimc		(*poly)/a ~(*poly)/a									0.00674
+
+#METAL-1
+	areacap		(allalu)/m1												0.00003944
+	overlap		(allalu)/m1 (*ndif,*pdif)/a								0.00007017
+	overlap		(allalu)/m1 (*poly)/a									0.0001256
+	overlap		(allalu)/m1 (nmos,pmos)/a								0.0001096
+	sidewall	(allalu)/m1 ~(allalu)/m1 ~(allalu)/m1 (allalu)/m1		7.769
+	perimc		(allalu)/m1 ~(allalu)/m1								0.00497
+	sideoverlap	(allalu)/m1 ~(allalu)/m1 (*ndif,*pdif)/a				0.00915
+	sideoverlap	(allalu)/m1 ~(allalu)/m1 (*poly)/a						0.01458
+	sideoverlap	(allalu)/m1 ~(allalu)/m1 (nmos,pmos)/a					0.01325
+
+#METAL-2
+	areacap		(allalu2)/m2											0.00002123
+	overlap		(allalu2)/m2 (*ndif,*pdif)/a							0.00002782	(allalu)/m1
+	overlap		(allalu2)/m2 (*poly)/a									0.00003368	(allalu)/m1
+	overlap		(allalu2)/m2 (nmos,pmos)/a								0.00003241	(allalu)/m1
+	overlap		(allalu2)/m2 (allalu)/m1								0.00007268
+	sidewall	(allalu2)/m2 ~(allalu2)/m2 ~(allalu2)/m2 (allalu2)/m2	9.921
+	perimc		(allalu2)/m2 ~(allalu2)/m2								0.00309
+	sideoverlap	(allalu2)/m2 ~(allalu2)/m2 (*ndif,*pdif)/a				0.00436		(allalu)/m1
+	sideoverlap	(allalu2)/m2 ~(allalu2)/m2 (*poly)/a					0.00548		(allalu)/m1
+	sideoverlap	(allalu2)/m2 ~(allalu2)/m2 (nmos,pmos)/a				0.00524		(allalu)/m1
+	sideoverlap	(allalu2)/m2 ~(allalu2)/m2 (allalu)/m1					0.01163
+
+#METAL-3
+	areacap		(allalu3)/m3											0.00001409
+	overlap		(allalu3)/m3 (*ndif,*pdif)/a							0.00001673	(allalu)/m1,(allalu2)/m2
+	overlap		(allalu3)/m3 (*poly)/a									0.00001868	(allalu)/m1,(allalu2)/m2
+	overlap		(allalu3)/m3 (nmos,pmos)/a								0.00001827	(allalu)/m1,(allalu2)/m2
+	overlap		(allalu3)/m3 (allalu)/m1								0.00002655	(allalu2)/m2
+	overlap		(allalu3)/m3 (allalu2)/m2								0.00007268
+	sidewall	(allalu3)/m3 ~(allalu3)/m3 ~(allalu3)/m3 (allalu3)/m3	10.175
+	perimc		(allalu3)/m3 ~(allalu3)/m3								0.00174
+	sideoverlap	(allalu3)/m3 ~(allalu3)/m3 (*ndif,*pdif)/a				0.00222		(allalu)/m1,(allalu2)/m2
+	sideoverlap	(allalu3)/m3 ~(allalu3)/m3 (*poly)/a					0.00259		(allalu)/m1,(allalu2)/m2
+	sideoverlap	(allalu3)/m3 ~(allalu3)/m3 (nmos,pmos)/a				0.00252		(allalu)/m1,(allalu2)/m2
+	sideoverlap	(allalu3)/m3 ~(allalu3)/m3 (allalu)/m1					0.00412		(allalu2)/m2
+	sideoverlap	(allalu3)/m3 ~(allalu3)/m3 (allalu2)/m2					0.01163
+
+#METAL-4
+	areacap		(allalu4)/m4											0.00001055
+	overlap		(allalu4)/m4 (*ndif,*pdif)/a							0.00001195	(allalu)/m1,(allalu2)/m2,(allalu3)/m3
+	overlap		(allalu4)/m4 (*poly)/a									0.00001291	(allalu)/m1,(allalu2)/m2,(allalu3)/m3
+	overlap		(allalu4)/m4 (nmos,pmos)/a								0.00001273	(allalu)/m1,(allalu2)/m2,(allalu3)/m3
+	overlap		(allalu4)/m4 (allalu)/m1								0.00001623	(allalu2)/m2,(allalu3)/m3
+	overlap		(allalu4)/m4 (allalu2)/m2								0.00002655	(allalu3)/m3
+	overlap		(allalu4)/m4 (allalu3)/m3								0.00007268
+	sidewall	(allalu4)/m4 ~(allalu4)/m4 ~(allalu4)/m4 (allalu4)/m4	10.274
+	perimc		(allalu4)/m4 ~(allalu4)/m4								0.00112
+	sideoverlap	(allalu4)/m4 ~(allalu4)/m4 (*ndif,*pdif)/a				0.00136		(allalu)/m1,(allalu2)/m2,(allalu3)/m3
+	sideoverlap	(allalu4)/m4 ~(allalu4)/m4 (*poly)/a					0.00152		(allalu)/m1,(allalu2)/m2,(allalu3)/m3
+	sideoverlap	(allalu4)/m4 ~(allalu4)/m4 (nmos,pmos)/a				0.00149		(allalu)/m1,(allalu2)/m2,(allalu3)/m3
+	sideoverlap	(allalu4)/m4 ~(allalu4)/m4 (allalu)/m1					0.00213		(allalu2)/m2,(allalu3)/m3
+	sideoverlap	(allalu4)/m4 ~(allalu4)/m4 (allalu2)/m2					0.00412		(allalu3)/m3
+	sideoverlap	(allalu4)/m4 ~(allalu4)/m4 (allalu3)/m3					0.01163
+
+#METAL-5
+	areacap		(allalu5)/m5											0.000008409
+	overlap		(allalu5)/m5 (*ndif,*pdif)/a							0.000009273	(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	overlap		(allalu5)/m5 (*poly)/a									0.000009864	(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	overlap		(allalu5)/m5 (nmos,pmos)/a								0.000009773	(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	overlap		(allalu5)/m5 (allalu)/m1								0.00001173	(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	overlap		(allalu5)/m5 (allalu2)/m2								0.00001623	(allalu3)/m3,(allalu4)/m4
+	overlap		(allalu5)/m5 (allalu3)/m3								0.00002655	(allalu4)/m4
+	overlap		(allalu5)/m5 (allalu4)/m4								0.00007268
+	sidewall	(allalu5)/m5 ~(allalu5)/m5 ~(allalu5)/m5 (allalu5)/m5	10.663
+	perimc		(allalu5)/m5 ~(allalu5)/m5								0.000790
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (*ndif,*pdif)/a				0.000920	(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (*poly)/a					0.00101		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (nmos,pmos)/a				0.000990	(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (allalu)/m1					0.00132		(allalu2)/m2,(allalu3)/m3,(allalu4)/m4
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (allalu2)/m2					0.00213		(allalu3)/m3,(allalu4)/m4
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (allalu3)/m3					0.00412		(allalu4)/m4
+	sideoverlap	(allalu5)/m5 ~(allalu5)/m5 (allalu4)/m4					0.01163
+
+#METAL-6
+	areacap		(allalu6)/m6											0.000006841
+	overlap		(allalu6)/m6 (*ndif,*pdif)/a							0.000007409	(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	overlap		(allalu6)/m6 (*poly)/a									0.000007750	(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	overlap		(allalu6)/m6 (nmos,pmos)/a								0.000007682	(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	overlap		(allalu6)/m6 (allalu)/m1								0.000008864	(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	overlap		(allalu6)/m6 (allalu2)/m2								0.00001123	(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	overlap		(allalu6)/m6 (allalu3)/m3								0.00001534	(allalu4)/m4,(allalu5)/m5
+	overlap		(allalu6)/m6 (allalu4)/m4								0.00002423	(allalu5)/m5
+	overlap		(allalu6)/m6 (allalu5)/m5								0.00005755
+	sidewall	(allalu6)/m6 ~(allalu6)/m6 ~(allalu6)/m6 (allalu6)/m6	25.443
+	perimc		(allalu6)/m6 ~(allalu6)/m6								0.00208
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (*ndif,*pdif)/a				0.00223		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (*poly)/a					0.00233		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (nmos,pmos)/a				0.00231		(allalu)/m1,(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (allalu)/m1					0.00264		(allalu2)/m2,(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (allalu2)/m2					0.00331		(allalu3)/m3,(allalu4)/m4,(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (allalu3)/m3					0.00450		(allalu4)/m4,(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (allalu4)/m4					0.00720		(allalu5)/m5
+	sideoverlap	(allalu6)/m6 ~(allalu6)/m6 (allalu5)/m5					0.01675
+
+	device mosfet p pmos *pdif None vdd 109 1427
+	device mosfet n nmos *ndif None vss 245 1727
+
+#BASED ON VSCLIB iv1v0x3
+	fetresis	pmos	linear		9877
+	fetresis	nmos	linear		3800
+
+style	lambda=1um(vsclib)
+	cscale		1
+	lambda		100
+	step		100
+	sidehalo	800	
+	
+	planeorder	abutment	0
+	planeorder	well		1
+	planeorder	active		2
+	planeorder	metal1		3
+	planeorder	metal2		4
+	planeorder	metal3		5
+	planeorder	metal4		6
+	planeorder	metal5		7
+	planeorder	metal6		8
+	planeorder	oxide		9
+
+	resist	(ndif,ntie,ndifct,ntiect)/a		26670
+	resist	(pdif,ptie,pdifct,ptiect)/a		59550
+	resist	(poly,polyct,pfet,nfet)/a		23860
+	resist	(metal1,m2c/m1)		49
+	resist	(metal2,via/m2)		26
+	resist	(nwell)/well		2505830
+
+#	contact	ndifct		4   18710
+#	contact pdifct		4   18710
+#	contact	polyct		4   11000
+#	contact	m2c		4      30
+
+#	areacap	(ndif,ntie,ndifct,ntiect)/a			0
+#	perimc	(ndif,ntie,ndifct,ntiect)/a	space,pwell	0
+
+#	areacap	(pdif,ptie,pdifct,ptiect)/a			0
+#	perimc	(pdif,ptie,pdifct,ptiect)/a	space,nwell	0
+
+	areacap	(poly,polyct)/a				39
+	overlap	(poly,polyct)/a	nwell,pwell 		39
+	perimc	(poly,polyct)/a	~(poly,polyct)/a	80
+	sideoverlap	(poly,polyct)/a	 ~(poly,polyct)/a	 nwell,pwell	 80	 
+
+	areacap	(m1,ndifct,pdifct,ntiect,ptiect,polyct,via)/m1				47
+	overlap	(m1,ndifct,pdifct,ntiect,ptiect,polyct,via)/m1	nwell,pwell		47	(poly,polyct)/a,(ndif,pdif,ptie,ntie,ndifct,pdifct,ntiect,ptiect)/a
+	overlap	(m1,ndifct,pdifct,ntiect,ptiect,polyct,via)/m1	(ndif,pdif,ptie,ntie,ndifct,pdifct,ntiect,ptiect)/a		47	
+	overlap	(m1,ndifct,pdifct,ntiect,ptiect,polyct,via)/m1	(poly,polyct)/a		30	
+	areacap	(m2,m2c,via2)/m2			19	
+	overlap	(m2,m2c,via2)/m2	nwell,pwell	19	(poly,polyct)/a,(m1,ndifct,pdifct,ntiect,ptiect,polyct,via)/m1,(ndif,pdif,ptie,ntie,ndifct,pdifct,ntiect,ptiect)/a
+	overlap	(m2,m2c,via2)/m2	(ndif,pdif,ptie,ntie,ndifct,pdifct,ntiect,ptiect)/a	22	(m1,ndifct,pdifct,ntiect,ptiect,polyct,via)/m1
+	overlap	(m2,m2c,via2)/m2	(poly,polyct)/a	19	(m1,ndifct,pdifct,ntiect,ptiect,polyct,via)/m1
+	overlap	(m2,m2c,via2)/m2	(m1,ndifct,pdifct,ntiect,ptiect,polyct,via)/m1	45	
+	
+	fet	pfet	pdif,pdifct	2 pfet	vdd!	nwell	204	450
+	fet	nfet	ndif,ndifct	2 nfet	vss!	pwell	150	450
+
+	fetresis	nfet	linear		14100 
+	fetresis	pfet	linear		48100 
+	fetresis	nfet	saturation	14100 
+	fetresis	pfet	saturation	48100 
+
+end
+
+wiring
+    contact pdifct1	4 metal1 0 pdif  1
+    contact ndifct1	4 metal1 0 ndif  1
+    contact polyct1	4 metal1 0 poly   1
+    contact via1	4 metal1 0 metal2 0
+    contact via2	4 metal2 0 metal3 0
+    contact via3	4 metal3 0 metal4 0
+    contact via4	4 metal4 0 metal5 0
+    contact via5	4 metal5 0 metal6 0
+end
+
+router
+    layer1 metal1 4 pdifct/m1,ndifct/m1,ptiect/m1,ntiect/m1,polyct/m1,m1,via1/m1 4
+    layer2 metal2 4 m2,via1/m2,via2/m2 4
+    contacts via1 4
+    gridspacing 8
+end
+
+plowing
+    fixed	nfet,pfet
+    covered	nfet,pfet
+    drag	nfet,pfet
+end
+
+plot
+    style gremlin
+	pfet			9
+	nfet			10
+	m2c			11
+	pwell			15
+	nwell			16
+	poly,polyct/a,nfet,pfet			19
+	pdifct/m1,ndifct/m1,ptiect/m1,ntiect/m1,polyct/m1,m1,m2c/m1		22
+	ntie,ntiect			24
+	m2,m2c/m2,via2/m2		28
+	pdif,pdifct,pfet		29
+	ptie,ptiect			30
+	ndif,nfet,ndifct		31
+	m2c/m1,polyct/m1,ndifct/m1,pdifct/m1,ptiect/m1,ntiect/m1 X
+
+    style postscript
+	 1 C0C0C0C0 C0C0C0C0 00000000 00000000 0C0C0C0C 0C0C0C0C 00000000 00000000
+	 2 A0A0A0A0 0A0A0A0A A0A0A0A0 0A0A0A0A A0A0A0A0 0A0A0A0A A0A0A0A0 0A0A0A0A
+	 3 00030003 000C000C 00300030 00C000C0 03000300 0C000C00 30003000 C000C000
+	 4 00000000 00000000 C0C0C0C0 00000000 00000000 00000000 0C0C0C0C 00000000
+	 5 FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF
+	 6 07070707 0E0E0E0E 1C1C1C1C 38383838 70707070 E0E0E0E0 C1C1C1C1 83838383
+	 7 18181818 30303030 60606060 C0C0C0C0 81818181 03030303 06060606 0C0C0C0C
+	 8 18181818 0C0C0C0C 06060606 03030303 81818181 C0C0C0C0 60606060 30303030
+	 9 18181818 3C3C3C3C 3C3C3C3C 18181818 81818181 C3C3C3C3 C3C3C3C3 81818181
+	10 F0F0F0F0 60606060 06060606 0F0F0F0F 0F0F0F0F 06060606 60606060 F0F0F0F0
+	11 01000080 02000040 0C000030 F000000F 000FF000 00300C00 00400200 00800100
+	12 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+	13 00000000 00000000 33333333 33333333 00000000 00000000 CCCCCCCC CCCCCCCC
+
+	 1  47  95 111   0	
+	 2 223  31 223   0	
+	 3   0   0   0 192	
+	 4  31 111  31   0	
+	 5  31 111 255   0	
+	 6  63  95 191   0	
+	 7 255  63 255   0	
+	 8   0   0   0 127	
+	 9 223  47 223   0	
+	10   0 255 255   0	
+	11   0   0 255   0	
+	12 191 127   0   0	
+	13  95 223  63   0	
+	14   0   0   0 255	
+	15 191 127  63   0	
+	16 111 151 244   0	
+	17  23 175 183   0	
+
+	polyct,ndifct,pdifct,ptiect,ntiect	14	X
+	m2c		14	B
+	m2c			14	13
+	m2,m2c		13	10
+	pdifct,ndifct,ptiect,ntiect,polyct,m1,m2c  12  9
+	ntie,ntiect			 7	1
+	ptie,ptiect			 6	1
+	nfet		         9	8
+	pfet     		 1	7
+	poly,polyct 		10	5
+	nfet			16	5
+	pfet    		17	5
+	pdif,pdifct		 1	5
+	ndif,ndifct		 9	5
+	pwell			 1	4
+	nwell			 2	4
+
+    style pnm
+	 draw metal1
+	 draw metal2
+	 draw polysilicon
+	 draw ndiffusion
+	 draw pdiffusion
+	 draw ntransistor
+	 draw ptransistor
+	 map ptie pdif
+	 map ntie ndif
+	 map polycontact polysilicon metal1
+	 map m2contact metal1 metal2
+	 map via2ontact metal2 metal3
+	 map ndifct ndiffusion metal1
+	 map pdifct pdiffusion metal1
+	 map ntiect ndiffusion metal1
+	 map ptiect pdiffusion metal1
+end
+
+# REVISION HISTORY FOR vsc200.tech27
+#====================================================================================
+# Starting from scmos.tech27, make the following changes
+#    19-Oct-03
+# 1/ Remove poly2 and associated transistor types and contact types (ec, el)
+# 2/ Remove via on flat surface rules 8.4 and 8.5
+# 3/ Remove all styles from cifoutput section except 1.0(gen) and plot
+# 4/ Remove all styles from cifinput except 1.0(gen)
+# 5/ Remove all styles from extract except 1.0(scna20_orb)
+# 6/ Remove the two versatec plot styles
+# 7/ Remove MOSIS rules 11.*, 12.*, 13.*, 19.*
+# 8/ Remove capwell and MOSIS rules 17.* and 18.*, CWC CIF layer and cw references
+# 9/ Remove highvoltnwell, highvoltpwell and associated diffusions
+#10/ Remove capacitor
+#11/ Remove bipolar transistor references and MOSIS rules 16.*
+#12/ Remove CCD references and MOSIS rules 
+#13/ Remove implant plane
+#14/ Remove enfet and epfet, nffet and pffet
+#15/ Add synonyms polyct, ndifct, pdifct, ntie, ntiect, ptie, ptiect
+#16/ Relabel styles to lambda=1um(vsclib)
+#    18-Dec-03
+#17/ Added support for the abutment box layer, AB (GDS 63)
+#18/ Fixed problem with labels over contacts
+#    12-Aug-04
+#19/ Add cifoutput section vxlib200 for ndif and pdif output
+#20/ Add cifoutput section vxlib200_uwind for Microwind CIF file
+#    1-APR-06
+#21/ Changed syntax of edge4way DRC rule from space 0 2 to space/a 0 2
+#    26-JUN-06
+#22/ Metal-1 spacing rule 7.2 changed from 4 to 3
+#    6-FEB-07
+#23/ Added cifout section for rgalib013
+#   14-FEB-07
+#24/ Added Via2, Metal3, Via3 and Metal4 layers
+#   17-JUN-07
+#25/ Added stacked via capability
+#26/ Added vgalib cifout section
+
